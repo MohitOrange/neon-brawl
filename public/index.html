@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-  <meta name="theme-color" content="#12002b" />
+  <meta name="theme-color" content="#2b3020" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="description" content="Neon Brawl — colourful 2D online multiplayer shooter. Put your face on your fighter and battle friends or bots!" />
+  <meta name="description" content="Neon Brawl — 2D online multiplayer combat shooter. Put your face on your soldier, jetpack across the valley and battle friends or bots!" />
   <title>Neon Brawl</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💥</text></svg>" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎖️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -20,27 +20,39 @@
 
   <!-- ============ MAIN MENU ============ -->
   <section id="menu" class="screen active">
-    <div class="menu-bg"><div class="sun"></div><div class="grid"></div></div>
-    <header class="brand">
-      <h1 class="logo" data-text="NEON BRAWL">NEON BRAWL</h1>
-      <div class="tag">2D ONLINE ARENA SHOOTER</div>
-      <div id="onlinePill" class="pill"><span class="dot"></span><span id="onlineTxt">connecting…</span></div>
+    <div class="menu-bg"></div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M32 3 58 14v18c0 15-11 25-26 29C17 57 6 47 6 32V14Z" fill="#3d4526" stroke="#d9c690" stroke-width="3"/><path d="m32 16 4.6 9.4 10.4 1.5-7.5 7.3 1.8 10.3L32 39.6l-9.3 4.9 1.8-10.3-7.5-7.3 10.4-1.5Z" fill="#e3a72f"/></svg>
+        </div>
+        <div>
+          <h1 class="logo">NEON BRAWL</h1>
+          <div class="tag">2D ONLINE COMBAT · SQUAD SHOOTER</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div id="onlinePill" class="pill"><span class="dot"></span><span id="onlineTxt">connecting…</span></div>
+        <button class="iconbtn" id="soundBtn" title="Sound">🔊</button>
+        <button class="iconbtn" id="fsBtn" title="Fullscreen">⛶</button>
+      </div>
     </header>
 
-    <div class="menu-grid">
-      <!-- character creator -->
+    <main class="menu-grid">
+      <!-- operator / character creator -->
       <div class="card creator">
-        <h2>YOUR FIGHTER</h2>
+        <div class="card-head"><span class="num">OP</span><h2>OPERATOR</h2></div>
         <div class="preview-wrap">
           <canvas id="preview" width="260" height="260"></canvas>
           <div class="face-btns">
-            <label class="btn small glow-pink" for="faceInput">📸 ADD YOUR FACE</label>
+            <label class="btn small amber" for="faceInput">📸 ADD YOUR FACE</label>
             <input type="file" id="faceInput" accept="image/*" hidden />
-            <button class="btn small ghost" id="faceRemove" hidden>✕ remove</button>
+            <button class="btn small ghost" id="faceRemove" hidden>✕ REMOVE</button>
           </div>
         </div>
         <label class="field">
-          <span>NAME</span>
+          <span>CALLSIGN</span>
           <input id="nameInput" maxlength="16" placeholder="Enter your name" autocomplete="off" />
         </label>
         <div class="seg" id="genderSeg">
@@ -49,64 +61,70 @@
         </div>
         <div class="swatch-row"><span>SKIN</span><div class="swatches" id="skinSw"></div></div>
         <div class="swatch-row"><span>HAIR</span><div class="swatches" id="hairSw"></div></div>
-        <div class="swatch-row"><span>OUTFIT</span><div class="swatches" id="shirtSw"></div></div>
-        <label class="toggle"><input type="checkbox" id="bigHead" checked /> <span>BIG-HEAD MODE 🤪 (for face photos)</span></label>
+        <div class="swatch-row"><span>UNIFORM</span><div class="swatches" id="shirtSw"></div></div>
+        <label class="toggle"><input type="checkbox" id="bigHead" checked /> <span>BIG-HEAD MODE 🤪 <em>for face photos</em></span></label>
       </div>
 
-      <!-- play options -->
+      <!-- deploy -->
       <div class="card play">
-        <h2>PLAY</h2>
-        <button class="btn big glow-cyan" id="btnQuick">⚡ QUICK MATCH <small>online</small></button>
+        <div class="card-head"><span class="num">GO</span><h2>DEPLOY</h2></div>
+        <button class="btn big amber" id="btnQuick">
+          <span class="ico">⚡</span><span class="lbl">QUICK MATCH<small>ONLINE · AUTO SQUAD</small></span><span class="arrow">›</span>
+        </button>
         <div class="row2">
-          <button class="btn glow-purple" id="btnCreate">➕ CREATE ROOM</button>
+          <button class="btn steel" id="btnCreate">＋ CREATE ROOM</button>
           <div class="join">
             <input id="codeInput" maxlength="5" placeholder="CODE" autocomplete="off" />
-            <button class="btn glow-purple" id="btnJoin">JOIN</button>
+            <button class="btn steel" id="btnJoin">JOIN</button>
           </div>
         </div>
-        <div class="divider"><span>OR PRACTICE OFFLINE</span></div>
+
+        <div class="divider"><span>TRAINING GROUND · OFFLINE</span></div>
         <div class="bots-box">
-          <div class="row-lbl"><span>BOTS</span><b id="botCountTxt">5</b></div>
+          <div class="row-lbl"><span>ENEMY BOTS</span><b id="botCountTxt">5</b></div>
           <input type="range" id="botCount" min="1" max="11" value="5" />
           <div class="seg small" id="diffSeg">
-            <button data-d="easy">EASY</button><button data-d="normal" class="on">NORMAL</button><button data-d="hard">HARD</button>
+            <button data-d="easy">RECRUIT</button><button data-d="normal" class="on">VETERAN</button><button data-d="hard">ELITE</button>
           </div>
-          <button class="btn big glow-pink" id="btnBots">🤖 PLAY VS BOTS</button>
-        </div>
-        <div class="controls-help">
-          <div><kbd>A</kbd><kbd>D</kbd> walk · <kbd>Shift</kbd> run · <kbd>W</kbd>/<kbd>Space</kbd> jump ×2</div>
-          <div><kbd>F</kbd>/<kbd>Right-click</kbd> jetpack · <kbd>S</kbd> crouch / drop · <kbd>Click</kbd> shoot</div>
-          <div><kbd>R</kbd> reload · <kbd>Q</kbd> swap gun · <kbd>Tab</kbd> scores · <kbd>T</kbd> chat · <kbd>1-4</kbd> emotes</div>
+          <button class="btn big olive" id="btnBots">
+            <span class="ico">🎯</span><span class="lbl">PLAY VS BOTS<small>NO INTERNET NEEDED</small></span><span class="arrow">›</span>
+          </button>
         </div>
       </div>
-    </div>
-    <footer class="foot"><button class="iconbtn" id="soundBtn">🔊</button><button class="iconbtn" id="fsBtn">⛶</button></footer>
+    </main>
+
+    <footer class="controls-help">
+      <span><kbd>A</kbd><kbd>D</kbd> move</span><span><kbd>Shift</kbd> sprint</span><span><kbd>W</kbd>/<kbd>Space</kbd> jump ×2</span>
+      <span><kbd>F</kbd>/<kbd>RMB</kbd> jetpack</span><span><kbd>S</kbd> crouch</span><span><kbd>LMB</kbd> fire</span>
+      <span><kbd>R</kbd> reload</span><span><kbd>Q</kbd> swap</span><span><kbd>Tab</kbd> scores</span><span><kbd>T</kbd> chat</span>
+    </footer>
   </section>
 
   <!-- ============ ROOM LOBBY ============ -->
   <section id="room" class="screen">
-    <div class="menu-bg"><div class="sun"></div><div class="grid"></div></div>
+    <div class="menu-bg"></div>
     <div class="card room-card">
       <div class="room-head">
         <div>
           <div class="muted">ROOM CODE</div>
           <div class="code" id="roomCode">-----</div>
         </div>
-        <button class="btn small glow-cyan" id="copyLink">🔗 COPY INVITE</button>
+        <button class="btn small amber" id="copyLink">🔗 COPY INVITE</button>
       </div>
+      <div class="card-head"><span class="num">⌖</span><h2>SQUAD</h2></div>
       <div class="players" id="roomPlayers"></div>
       <div class="host-ctrl" id="hostCtrl">
-        <div class="row2">
-          <button class="btn small" id="addBot">+ BOT</button>
-          <button class="btn small" id="remBot">− BOT</button>
+        <div class="row2 settings">
+          <button class="btn small steel" id="addBot">+ BOT</button>
+          <button class="btn small steel" id="remBot">− BOT</button>
           <select id="setTime"><option value="120">2 min</option><option value="180">3 min</option><option value="300" selected>5 min</option><option value="600">10 min</option></select>
           <select id="setKills"><option value="10">10 kills</option><option value="20" selected>20 kills</option><option value="30">30 kills</option><option value="50">50 kills</option></select>
-          <select id="setDiff"><option value="easy">easy bots</option><option value="normal" selected>normal bots</option><option value="hard">hard bots</option></select>
+          <select id="setDiff"><option value="easy">recruit bots</option><option value="normal" selected>veteran bots</option><option value="hard">elite bots</option></select>
         </div>
-        <button class="btn big glow-pink" id="startBtn">▶ START MATCH</button>
+        <button class="btn big amber" id="startBtn"><span class="ico">▶</span><span class="lbl">START MISSION</span><span class="arrow">›</span></button>
       </div>
-      <div class="muted center" id="waitHost">Waiting for host to start…</div>
-      <button class="btn ghost" id="leaveRoom">← LEAVE</button>
+      <div class="muted center" id="waitHost">Waiting for host to start the mission…</div>
+      <button class="btn ghost" id="leaveRoom">← LEAVE ROOM</button>
     </div>
   </section>
 
@@ -154,14 +172,14 @@
 
     <div class="board" id="board">
       <h2>SCOREBOARD</h2>
-      <table><thead><tr><th>#</th><th>PLAYER</th><th>K</th><th>D</th></tr></thead><tbody id="boardBody"></tbody></table>
+      <table><thead><tr><th>#</th><th>OPERATOR</th><th>K</th><th>D</th></tr></thead><tbody id="boardBody"></tbody></table>
     </div>
 
     <div class="pause" id="pause">
       <div class="card">
-        <h2>PAUSED</h2>
-        <button class="btn big glow-cyan" id="resumeBtn">RESUME</button>
-        <button class="btn" id="pSound">🔊 SOUND</button>
+        <div class="card-head"><span class="num">II</span><h2>PAUSED</h2></div>
+        <button class="btn big amber" id="resumeBtn"><span class="lbl">RESUME</span></button>
+        <button class="btn steel" id="pSound">🔊 SOUND</button>
         <button class="btn ghost" id="quitBtn">QUIT TO MENU</button>
       </div>
     </div>
@@ -170,11 +188,12 @@
   <!-- ============ MATCH END ============ -->
   <section id="end" class="screen">
     <div class="card end-card">
-      <h1 class="logo small" data-text="MATCH OVER">MATCH OVER</h1>
+      <div class="tag center">MISSION COMPLETE</div>
+      <h1 class="logo small">DEBRIEF</h1>
       <div class="podium" id="podium"></div>
       <div class="standings" id="standings"></div>
       <div class="row2">
-        <button class="btn big glow-pink" id="againBtn">↻ PLAY AGAIN</button>
+        <button class="btn big amber" id="againBtn">↻ PLAY AGAIN</button>
         <button class="btn ghost" id="endMenu">MENU</button>
       </div>
     </div>

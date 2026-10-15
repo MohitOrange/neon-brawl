@@ -15,7 +15,7 @@ const SFX = (() => {
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
   }
 
-  function noise(dur, freq, q, vol, type = 'lowpass', at = 0, pan = 0) {
+  function noise(dur, freq, q, vol, type = 'lowpass', at = 0, pan = 0, dest) {
     if (!ctx || muted) return;
     const t = ctx.currentTime + at;
     const s = ctx.createBufferSource(); s.buffer = noiseBuf;
@@ -23,7 +23,7 @@ const SFX = (() => {
     const g = ctx.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
     const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
     s.connect(f); f.connect(g);
-    if (p) { p.pan.value = pan; g.connect(p); p.connect(master); } else g.connect(master);
+    if (p) { p.pan.value = pan; g.connect(p); p.connect(dest || master); } else g.connect(dest || master);
     s.start(t, Math.random() * 0.5); s.stop(t + dur);
   }
   function tone(f0, f1, dur, vol, type = 'square', at = 0, dest) {
@@ -72,16 +72,21 @@ const SFX = (() => {
       if (!ctx) return;
       if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
       if (!on) return;
-      // tiny synthwave loop: bass + arpeggio, scheduled one bar ahead
-      const prog = [[45, 57, 60, 64], [41, 53, 57, 60], [43, 55, 59, 62], [40, 52, 55, 59]];
+      // low military march: taiko-style kicks, snare with rolls, minor bass pulse
       const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
-      let bar = 0; const beat = 0.21;
+      const bassLine = [38, 38, 41, 36]; // D, D, F, C
+      let bar = 0; const beat = 0.15; // 16th note
       const sched = () => {
         if (muted) { bar++; return; }
-        const ch = prog[bar % 4];
+        const root = bassLine[bar % 4];
         for (let i = 0; i < 16; i++) {
-          if (i % 2 === 0) tone(mtof(ch[0]), mtof(ch[0]) * 0.99, beat * 0.9, 0.35, 'sawtooth', i * beat, musicGain);
-          tone(mtof(ch[1 + (i % 3)] + 12), mtof(ch[1 + (i % 3)] + 12), beat * 0.6, 0.12, 'square', i * beat, musicGain);
+          const at = i * beat;
+          if (i === 0 || i === 6 || i === 8 || (bar % 2 && i === 14)) { tone(120, 42, 0.35, 0.9, 'sine', at, musicGain); noise(0.12, 300, 0.8, 0.25, 'lowpass', at, 0, musicGain); }
+          if (i === 4 || i === 12) noise(0.18, 1800, 0.9, 0.45, 'bandpass', at, 0, musicGain);
+          if (bar % 4 === 3 && i >= 12) noise(0.07, 2200, 1, 0.22 + (i - 12) * 0.05, 'bandpass', at + beat / 2, 0, musicGain);
+          if (i % 4 === 2) noise(0.04, 7000, 0.6, 0.06, 'highpass', at, 0, musicGain);
+          if (i % 8 === 0) tone(mtof(root), mtof(root) * 0.995, beat * 7, 0.38, 'triangle', at, musicGain);
+          if (i === 10) tone(mtof(root + 7), mtof(root + 7), beat * 2, 0.2, 'triangle', at, musicGain);
         }
         bar++;
       };

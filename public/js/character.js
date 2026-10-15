@@ -1,10 +1,10 @@
 // Neon Brawl — weapons + procedural fighter drawing (male / female, face photos, big-head mode)
 const WEAPONS = {
-  pistol:  { name: 'PISTOL',   dmg: 18, rate: 0.24, speed: 1700, mag: 12, reserve: Infinity, reload: 1.0, spread: 0.03, pellets: 1, len: 22, col: '#00e5ff', shake: 2, kick: 40 },
-  smg:     { name: 'SMG',      dmg: 11, rate: 0.085, speed: 1800, mag: 32, reserve: 96, reload: 1.4, spread: 0.07, pellets: 1, len: 32, col: '#7cff4f', shake: 1.4, kick: 25 },
-  shotgun: { name: 'SHOTGUN',  dmg: 10, rate: 0.75, speed: 1500, mag: 6, reserve: 18, reload: 1.6, spread: 0.2, pellets: 7, len: 38, col: '#ff7b00', shake: 7, kick: 260, life: 0.36 },
-  sniper:  { name: 'SNIPER',   dmg: 76, rate: 1.1, speed: 3800, mag: 5, reserve: 10, reload: 2.0, spread: 0.003, pellets: 1, len: 54, col: '#ff2e88', shake: 5, kick: 160 },
-  rocket:  { name: 'ROCKET',   dmg: 88, rate: 1.0, speed: 950, mag: 1, reserve: 5, reload: 1.4, spread: 0.015, pellets: 1, len: 44, col: '#ffe600', shake: 6, kick: 200, splash: 160 }
+  pistol:  { name: 'PISTOL',   dmg: 18, rate: 0.24, speed: 1700, mag: 12, reserve: Infinity, reload: 1.0, spread: 0.03, pellets: 1, len: 22, col: '#ffd98a', shake: 2, kick: 40 },
+  smg:     { name: 'SMG',      dmg: 11, rate: 0.085, speed: 1800, mag: 32, reserve: 96, reload: 1.4, spread: 0.07, pellets: 1, len: 32, col: '#ffe7a3', shake: 1.4, kick: 25 },
+  shotgun: { name: 'SHOTGUN',  dmg: 10, rate: 0.75, speed: 1500, mag: 6, reserve: 18, reload: 1.6, spread: 0.2, pellets: 7, len: 38, col: '#ffbe6b', shake: 7, kick: 260, life: 0.36 },
+  sniper:  { name: 'SNIPER',   dmg: 76, rate: 1.1, speed: 3800, mag: 5, reserve: 10, reload: 2.0, spread: 0.003, pellets: 1, len: 54, col: '#fff6d8', shake: 5, kick: 160 },
+  rocket:  { name: 'ROCKET',   dmg: 88, rate: 1.0, speed: 950, mag: 1, reserve: 5, reload: 1.4, spread: 0.015, pellets: 1, len: 44, col: '#ff9a3c', shake: 6, kick: 200, splash: 160 }
 };
 
 const Fighter = (() => {
@@ -22,23 +22,28 @@ const Fighter = (() => {
   };
 
   function drawGun(ctx, w, recoil) {
-    const W = WEAPONS[w] || WEAPONS.pistol;
     ctx.save();
     ctx.translate(-recoil * 7, 0);
     ctx.lineJoin = 'round';
-    ctx.fillStyle = '#1c1c28'; ctx.strokeStyle = W.col; ctx.lineWidth = 1.6;
-    const r = (x, y, ww, hh) => { ctx.beginPath(); ctx.roundRect(x, y, ww, hh, 2); ctx.fill(); ctx.stroke(); };
+    const metal = '#2e3033', dark = '#17181a', wood = '#7a4f2a', olive = '#4a5130';
+    const r = (x, y, ww, hh, col, rad = 2) => { ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(x, y, ww, hh, rad); ctx.fill(); };
     switch (w) {
-      case 'pistol': r(-2, -5, 22, 8); r(0, 1, 7, 9); break;
-      case 'smg': r(-8, -5, 36, 9); r(2, 2, 6, 10); r(14, 3, 5, 12); r(-14, -3, 8, 6); break;
-      case 'shotgun': r(-14, -4, 50, 8); r(4, 3, 18, 6); r(-18, -2, 10, 8); break;
-      case 'sniper': r(-16, -4, 68, 7); r(4, -11, 22, 6); r(-20, -2, 12, 9); r(0, 2, 6, 9);
-        ctx.fillStyle = W.col; ctx.fillRect(22, -10, 4, 4); break;
-      case 'rocket': ctx.fillStyle = '#2a2a3a'; r(-26, -8, 66, 15); ctx.fillStyle = W.col; ctx.fillRect(36, -8, 6, 15); r(0, 6, 7, 9); break;
+      case 'pistol':
+        r(-2, -5, 22, 7, metal); r(-2, -5, 22, 2, '#4a4d52'); r(0, 1, 7, 10, dark, 3); r(6, 1, 5, 3, dark); break;
+      case 'smg':
+        r(-14, -3, 10, 6, dark); r(-6, -5, 32, 9, metal); r(24, -3, 8, 4, dark); r(-6, -5, 32, 2, '#4a4d52');
+        r(2, 3, 6, 9, dark, 2); r(13, 3, 5, 14, '#3a3c40', 1); r(6, -9, 10, 4, dark); break;
+      case 'shotgun':
+        r(-22, -3, 16, 9, wood, 3); r(-8, -4, 44, 7, metal); r(-8, -4, 44, 2, '#55585c'); r(8, 3, 18, 6, wood, 3); r(-6, 2, 5, 8, dark); break;
+      case 'sniper':
+        r(-24, -3, 18, 10, olive, 3); r(-8, -4, 34, 8, olive); r(24, -2, 32, 4, metal); r(54, -3, 6, 6, dark);
+        r(2, -12, 24, 6, dark, 3); ctx.fillStyle = '#7fb2d8'; ctx.beginPath(); ctx.arc(25, -9, 2.2, 0, 7); ctx.fill();
+        r(0, 3, 6, 9, dark); r(30, 2, 2, 10, dark); r(36, 2, 2, 10, dark); break;
+      case 'rocket':
+        r(-26, -8, 64, 15, olive, 5); r(-26, -8, 64, 3, 'rgba(255,255,255,0.15)', 2); r(-30, -9, 8, 17, dark, 2); r(36, -9, 8, 17, dark, 2);
+        r(0, 6, 7, 10, dark); r(12, 6, 6, 8, dark); r(4, -14, 14, 6, dark, 2);
+        ctx.fillStyle = '#c9a33b'; ctx.fillRect(-12, -6, 3, 11); break;
     }
-    // neon strip
-    ctx.fillStyle = W.col; ctx.shadowColor = W.col; ctx.shadowBlur = 8;
-    ctx.fillRect(2, -2, W.len * 0.5, 2);
     ctx.restore();
   }
 
@@ -91,12 +96,12 @@ const Fighter = (() => {
     if (e.jet) {
       const fl = 18 + Math.random() * 16;
       const g = ctx.createLinearGradient(0, -36 + c, 0, -36 + c + fl);
-      g.addColorStop(0, '#fff'); g.addColorStop(0.3, '#00e5ff'); g.addColorStop(1, 'rgba(255,46,136,0)');
+      g.addColorStop(0, '#fffbe0'); g.addColorStop(0.25, '#ffc14d'); g.addColorStop(0.6, '#ff6a1f'); g.addColorStop(1, 'rgba(120,120,120,0)');
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.moveTo(-23, -36 + c); ctx.lineTo(-13, -36 + c); ctx.lineTo(-18, -36 + c + fl); ctx.fill();
     }
     // legs
-    const pants = e.pants || '#2b2d42';
+    const pants = e.pants || '#3d4029';
     const legA = e.ground ? Math.sin(ph) * 0.75 * sp : 0.55, legB = e.ground ? -Math.sin(ph) * 0.75 * sp : -0.35;
     const leg = (a, front) => {
       const L = e.crouch ? 22 : 32;
@@ -104,15 +109,17 @@ const Fighter = (() => {
       const fx = Math.sin(a) * L, fy = hipY + Math.cos(a) * L + (e.crouch ? 10 : 0);
       ctx.strokeStyle = front ? pants : shade(pants, 0.75); ctx.lineWidth = 9; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(front ? 3 : -3, hipY); ctx.lineTo(kx, ky); ctx.lineTo(fx, Math.min(0, fy)); ctx.stroke();
-      ctx.fillStyle = '#15151f'; ctx.beginPath(); ctx.ellipse(fx + 4, Math.min(-2, fy - 2), 7, 4, 0, 0, 7); ctx.fill();
-      ctx.fillStyle = e.shirt; ctx.fillRect(fx, Math.min(-2, fy - 2) - 1, 6, 2);
+      ctx.fillStyle = '#2a2118'; ctx.beginPath(); ctx.ellipse(fx + 4, Math.min(-2, fy - 2), 7, 4, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#14100b'; ctx.fillRect(fx - 3, Math.min(-2, fy - 2) + 2, 14, 2);
     };
     leg(legB, false);
 
     // jetpack body
-    ctx.fillStyle = '#2a2a3c'; ctx.strokeStyle = '#00e5ff'; ctx.lineWidth = 1.5;
+    ctx.fillStyle = '#5b5f62'; ctx.strokeStyle = '#2b2d2f'; ctx.lineWidth = 1.5;
     ctx.beginPath(); ctx.roundRect(-25, -62 + c, 13, 27, 4); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = '#ff2e88'; ctx.fillRect(-22, -57 + c, 7, 3);
+    ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-23, -60 + c, 3, 22);
+    ctx.fillStyle = '#2b2d2f'; ctx.fillRect(-23, -37 + c, 9, 3);
+    ctx.fillStyle = '#c23b22'; ctx.fillRect(-22, -57 + c, 7, 3);
 
     // back arm
     const la = s === 1 ? e.aim : Math.PI - e.aim;
@@ -124,14 +131,20 @@ const Fighter = (() => {
     leg(legA, true);
 
     // torso
-    const sh = e.shirt || '#ff2e88';
+    const sh = e.shirt || '#5b6b2f';
     ctx.fillStyle = sh;
     ctx.beginPath();
     if (fem) { ctx.moveTo(-11, -64 + c); ctx.lineTo(11, -64 + c); ctx.lineTo(8, -46 + c); ctx.lineTo(13, -30 + c); ctx.lineTo(-13, -30 + c); ctx.lineTo(-8, -46 + c); ctx.closePath(); }
     else ctx.roundRect(-13, -65 + c, 26, 35, 7);
     ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.25)'; ctx.fillRect(-2, -62 + c, 3, 28);
-    ctx.fillStyle = '#15151f'; ctx.fillRect(fem ? -12 : -13, -35 + c, fem ? 24 : 26, 4);
+    // tactical vest + pouches + belt
+    ctx.fillStyle = shade(sh, 0.72);
+    ctx.beginPath(); ctx.roundRect(fem ? -10 : -12, -60 + c, fem ? 20 : 24, 22, 4); ctx.fill();
+    ctx.fillStyle = shade(sh, 0.55);
+    for (let k = 0; k < 3; k++) ctx.fillRect((fem ? -8 : -10) + k * (fem ? 6 : 7.5), -50 + c, fem ? 5 : 6, 9);
+    ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.fillRect(fem ? -10 : -12, -60 + c, fem ? 20 : 24, 2);
+    ctx.fillStyle = '#2a2418'; ctx.fillRect(fem ? -12 : -13, -35 + c, fem ? 24 : 26, 4);
+    ctx.fillStyle = '#b89a4a'; ctx.fillRect(-2, -35 + c, 4, 4);
 
     // long hair behind head (female)
     const hx = 2, hy = -64 + c - headR + 3;
@@ -198,14 +211,14 @@ const Fighter = (() => {
   function drawTag(ctx, e, me) {
     const face = e.face && e.bigHead;
     const y = e.y - (e.crouch ? 14 : 0) - (face ? 118 : 96);
-    ctx.font = '600 15px Rajdhani, sans-serif'; ctx.textAlign = 'center';
+    ctx.font = '600 15px "Barlow Condensed", "Arial Narrow", sans-serif'; ctx.textAlign = 'center';
     const w = Math.max(56, ctx.measureText(e.name).width + 12);
     ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.beginPath(); ctx.roundRect(e.x - w / 2, y - 14, w, 18, 6); ctx.fill();
-    ctx.fillStyle = me ? '#ffe600' : e.isBot ? '#b9a6dc' : '#fff';
+    ctx.fillStyle = me ? '#ffd34d' : e.isBot ? '#d8d0b8' : '#fff';
     ctx.fillText(e.name, e.x, y);
     const hp = Math.max(0, e.hp) / 100;
     ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(e.x - 24, y + 6, 48, 5);
-    ctx.fillStyle = hp > 0.5 ? '#7cff4f' : hp > 0.25 ? '#ffe600' : '#ff3b3b';
+    ctx.fillStyle = hp > 0.5 ? '#6fcf4a' : hp > 0.25 ? '#e6c13a' : '#d9412b';
     ctx.fillRect(e.x - 24, y + 6, 48 * hp, 5);
   }
 
@@ -218,7 +231,7 @@ const Fighter = (() => {
     if (p.face && !face) { const im = new Image(); im.onload = () => avatar(canvas, p); im.src = p.face; }
     g.save();
     g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, 7); g.clip();
-    const bg = g.createLinearGradient(0, 0, S, S); bg.addColorStop(0, p.shirt || '#ff2e88'); bg.addColorStop(1, '#1a0538');
+    const bg = g.createLinearGradient(0, 0, 0, S); bg.addColorStop(0, '#9cc3df'); bg.addColorStop(0.7, '#d9e4d0'); bg.addColorStop(1, '#6f8f52');
     g.fillStyle = bg; g.fillRect(0, 0, S, S);
     if (face) g.drawImage(face, 0, 0, S, S);
     else {
@@ -229,5 +242,5 @@ const Fighter = (() => {
     g.restore();
   }
 
-  return { draw, drawTag, avatar, faceImg };
+  return { draw, drawTag, avatar, faceImg, drawGun };
 })();

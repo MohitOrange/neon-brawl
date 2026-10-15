@@ -73,8 +73,8 @@
     'Nacho', 'Kiki Kaboom', 'Dr. Wobble', 'Sniper Sue', 'Jelly Jay', 'Ravi Rampage'
   ];
   const SKINS = ['#ffdbac', '#f1c27d', '#e0ac69', '#c68642', '#8d5524', '#5c3a21'];
-  const COLORS = ['#ff2e88', '#00e5ff', '#ffe600', '#7cff4f', '#b14bff', '#ff7b00', '#ffffff', '#ff3b3b'];
-  const HAIRS = ['#1b1b1b', '#5a3825', '#e8c26a', '#ff4fa3', '#33d6ff', '#a8ff3e', '#e04040', '#f2f2f2'];
+  const COLORS = ['#5b6b2f', '#8a7a4a', '#c2a66b', '#3e4a3d', '#6b6f73', '#2f4566', '#7a3b2e', '#b5302a']; // olive, khaki, desert, forest, urban, navy, rust, red
+  const HAIRS = ['#1b1b1b', '#3b2416', '#6a4428', '#a8743f', '#d8b26a', '#8e3b1f', '#8f8f8f', '#e8e2d6'];
 
   const rnd = (a) => a[Math.floor(Math.random() * a.length)];
   const clampStr = (s, n) => String(s == null ? '' : s).replace(/[<>]/g, '').trim().slice(0, n);
@@ -88,7 +88,7 @@
       gender: p.gender === 'female' ? 'female' : 'male',
       skin: isColor(p.skin) ? p.skin : SKINS[1],
       shirt: isColor(p.shirt) ? p.shirt : COLORS[0],
-      pants: isColor(p.pants) ? p.pants : '#2b2d42',
+      pants: isColor(p.pants) ? p.pants : '#3d4029',
       hair: isColor(p.hair) ? p.hair : HAIRS[0],
       bigHead: p.bigHead !== false,
       face
@@ -100,7 +100,7 @@
     for (let i = 0; i < 20 && used.has(name); i++) name = rnd(BOT_NAMES);
     return {
       name, gender: Math.random() < 0.5 ? 'male' : 'female', skin: rnd(SKINS), shirt: rnd(COLORS),
-      pants: rnd(['#2b2d42', '#1d3557', '#3a0ca3', '#222', '#14532d', '#5b2333']), hair: rnd(HAIRS),
+      pants: rnd(['#3d4029', '#4a4232', '#2e3438', '#5c5340', '#33402c', '#2b2f3a']), hair: rnd(HAIRS),
       bigHead: false, face: null
     };
   }

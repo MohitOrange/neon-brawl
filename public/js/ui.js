@@ -6,7 +6,7 @@
   const toast = (m) => { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2600); };
 
   // ------------------------------------------------------- profile --
-  const defaults = { name: '', gender: 'male', skin: NB.SKINS[1], hair: NB.HAIRS[0], shirt: NB.COLORS[0], pants: '#2b2d42', face: null, bigHead: true };
+  const defaults = { name: '', gender: 'male', skin: NB.SKINS[1], hair: NB.HAIRS[0], shirt: NB.COLORS[0], pants: '#3d4029', face: null, bigHead: true };
   let profile = Object.assign({}, defaults);
   try { Object.assign(profile, JSON.parse(localStorage.getItem('nb_profile') || '{}')); } catch (e) { /* ignore */ }
   const save = () => { try { localStorage.setItem('nb_profile', JSON.stringify(profile)); } catch (e) { toast('Could not save profile (storage full)'); } };
@@ -65,8 +65,8 @@
 
   // animated preview
   const pv = $('preview'), pg = pv.getContext('2d');
-  let pmx = 0.5, pmy = 0.4;
-  addEventListener('mousemove', (e) => { const r = pv.getBoundingClientRect(); pmx = (e.clientX - r.left) / r.width; pmy = (e.clientY - r.top) / r.height; });
+  let pmx = 0.95, pmy = 0.48, pmMoved = false;
+  addEventListener('mousemove', (e) => { const r = pv.getBoundingClientRect(); pmx = (e.clientX - r.left) / r.width; pmy = (e.clientY - r.top) / r.height; pmMoved = true; });
   function previewLoop(ts) {
     requestAnimationFrame(previewLoop);
     if (!$('menu').classList.contains('active')) return;
@@ -76,11 +76,14 @@
     pg.setTransform(dp, 0, 0, dp, 0, 0);
     pg.clearRect(0, 0, 260, 260);
     // pad
-    pg.fillStyle = '#ff2e88'; pg.shadowColor = '#ff2e88'; pg.shadowBlur = 20;
-    pg.beginPath(); pg.ellipse(130, 222, 70, 12, 0, 0, 7); pg.fill(); pg.shadowBlur = 0;
-    pg.fillStyle = '#1d0b40'; pg.beginPath(); pg.ellipse(130, 220, 66, 10, 0, 0, 7); pg.fill();
+    // patch of ground: dirt, grass rim, a couple of sandbags
+    pg.fillStyle = '#4a3524'; pg.beginPath(); pg.ellipse(130, 226, 92, 16, 0, 0, 7); pg.fill();
+    pg.fillStyle = '#5f9a3a'; pg.beginPath(); pg.ellipse(130, 220, 92, 12, 0, 0, 7); pg.fill();
+    pg.fillStyle = '#7fb74f'; pg.beginPath(); pg.ellipse(130, 218, 84, 9, 0, 0, 7); pg.fill();
+    [[52, 206], [72, 206], [62, 196], [190, 206]].forEach(([x, y]) => { pg.fillStyle = '#b39d6e'; pg.beginPath(); pg.roundRect(x, y, 22, 11, 5); pg.fill(); pg.fillStyle = 'rgba(0,0,0,0.15)'; pg.fillRect(x + 2, y + 8, 18, 3); });
+    pg.fillStyle = 'rgba(0,0,0,0.25)'; pg.beginPath(); pg.ellipse(130, 220, 30, 5, 0, 0, 7); pg.fill();
     pg.save(); pg.translate(130, 220); pg.scale(2, 2);
-    const aim = Math.atan2((pmy * 260 - 110) , (pmx * 260 - 130));
+    const aim = pmMoved ? Math.atan2((pmy * 260 - 110), (pmx * 260 - 130)) : Math.sin(t * 0.8) * 0.3 - 0.05;
     Fighter.draw(pg, Object.assign({}, profile, { x: 0, y: Math.sin(t * 3) * 1.2, dir: Math.cos(aim) >= 0 ? 1 : -1, aim, vx: 0,
       ground: true, alive: true, hurtT: 0, weapon: ['pistol', 'smg', 'shotgun', 'sniper', 'rocket'][Math.floor(t / 2.5) % 5],
       walkPh: 0, recoil: Math.max(0, Math.sin(t * 5)) > 0.97 ? 1 : 0, jet: Math.sin(t * 0.7) > 0.8 }), t);

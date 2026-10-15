@@ -1,7 +1,7 @@
 # 💥 NEON BRAWL
 
-**A colourful 2D online multiplayer arena shooter for the web — desktop, mobile and tablet.**
-Put **your own face** on your fighter, pick male or female, choose your colours and battle friends or bots in a neon synthwave city.
+**A 2D online multiplayer combat shooter for the web — desktop, mobile and tablet.**
+Put **your own face** on your soldier, pick male or female, choose your uniform and battle friends or bots in a realistic valley outpost.
 
 ![made with](https://img.shields.io/badge/HTML5-Canvas-ff2e88) ![socket.io](https://img.shields.io/badge/Socket.io-multiplayer-00e5ff) ![node](https://img.shields.io/badge/Node-%3E%3D18-7cff4f)
 
@@ -14,8 +14,9 @@ Put **your own face** on your fighter, pick male or female, choose your colours 
 - **Full movement** — walk, run, crouch, jump, double-jump, **jetpack flying**, drop through platforms, rocket-jumping.
 - **5 weapons** — Pistol, SMG, Shotgun, Sniper, Rocket Launcher. Guns are held and aimed 360°, with reloads, ammo, recoil and headshots.
 - **Pickups** — weapon and health pickups that respawn.
-- **Juicy effects** — muzzle flashes, tracers, shell casings, explosions, confetti, screen shake, damage numbers, kill streaks (DOUBLE KILL!), synth sound effects and synthwave music.
-- **Neon environment** — parallax city skyline, striped sunset, hover platforms, palm trees, street lamps, neon signs, cars and crates.
+- **Juicy effects** — muzzle flashes, tracers, shell casings, explosions with smoke, screen shake, damage numbers, kill streaks (DOUBLE KILL!), synthesized sound effects and a military drum march.
+- **Realistic outdoor arena** — daytime sky with drifting clouds and birds, layered snowy mountains, forests and hills, grassy dirt ground, wooden bridges, steel girders, floating rock ledges, concrete bunkers, sandbags, ammo crates, jeeps, flags and barbed wire.
+- **Tactical UI** — stencil headings (Black Ops One), condensed body text (Barlow Condensed), olive / sand / amber palette, with the live arena panning behind the lobby.
 - **HUD** — health, jet fuel, ammo, timer, kill feed, minimap, scoreboard, chat and emotes.
 - **Responsive** — dual virtual joysticks + buttons on phones & tablets, mouse + keyboard on desktop.
 - **Server-authoritative damage** — the server owns health, kills, respawns and pickups, and caps damage per weapon.
