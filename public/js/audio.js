@@ -1,9 +1,21 @@
 // Neon Brawl — synthesized sound effects + synthwave music (no audio files needed)
 const SFX = (() => {
   let ctx = null, master = null, musicGain = null, noiseBuf = null, musicTimer = null;
-  let muted = localStorage.getItem('nb_muted') === '1';
+  let muted = false;
+  try { muted = localStorage.getItem('nb_muted') === '1'; } catch (e) { /* storage blocked */ }
+  // "you're out" voice clip, played when the local player is eliminated
+  const outClip = typeof Audio !== 'undefined' ? new Audio('sounds/out.mp3') : null;
+  if (outClip) { outClip.preload = 'auto'; outClip.volume = 0.9; }
+  let outPrimed = false;
 
   function init() {
+    // mobile browsers only allow audio after a tap: prime the clip silently on the first gesture
+    if (outClip && !outPrimed) {
+      outPrimed = true; outClip.muted = true;
+      const p = outClip.play();
+      if (p && p.then) p.then(() => { outClip.pause(); outClip.currentTime = 0; outClip.muted = false; }).catch(() => { outClip.muted = false; });
+      else outClip.muted = false;
+    }
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
@@ -39,7 +51,7 @@ const SFX = (() => {
     init,
     get muted() { return muted; },
     toggle() {
-      init(); muted = !muted; localStorage.setItem('nb_muted', muted ? '1' : '0');
+      init(); muted = !muted; try { localStorage.setItem('nb_muted', muted ? '1' : '0'); } catch (e) { /* ignore */ }
       if (master) master.gain.value = muted ? 0 : 0.55;
       return muted;
     },
@@ -64,7 +76,14 @@ const SFX = (() => {
     empty() { tone(1200, 1100, 0.03, 0.06, 'square'); },
     pickup() { tone(600, 600, 0.08, 0.12, 'triangle'); tone(900, 900, 0.08, 0.12, 'triangle', 0.08); tone(1350, 1350, 0.15, 0.12, 'triangle', 0.16); },
     kill() { [523, 659, 784, 1046].forEach((f, i) => tone(f, f, 0.12, 0.12, 'square', i * 0.07)); },
-    death() { tone(400, 60, 0.8, 0.2, 'sawtooth'); },
+    death() {
+      if (muted) return;
+      if (outClip) {
+        outClip.muted = false; outClip.currentTime = 0;
+        const p = outClip.play();
+        if (p && p.catch) p.catch(() => tone(400, 60, 0.8, 0.2, 'sawtooth'));
+      } else tone(400, 60, 0.8, 0.2, 'sawtooth');
+    },
     click() { tone(1000, 1400, 0.05, 0.06, 'triangle'); },
 
     music(on) {

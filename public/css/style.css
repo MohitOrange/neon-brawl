@@ -140,6 +140,28 @@ input[type=range] { width: 100%; accent-color: var(--amber); }
 kbd { display: inline-block; min-width: 20px; text-align: center; background: #2c3122; border: 1px solid #555b45; border-bottom-width: 3px; border-radius: 3px;
   padding: 0 5px; margin-right: 2px; font-family: inherit; color: var(--text); font-size: 12px; font-weight: 700; }
 
+/* ---------- credit + about ---------- */
+.credit { margin-top: 10px; font-size: 14px; letter-spacing: 1.5px; color: var(--text); text-shadow: 0 1px 3px rgba(0, 0, 0, .9); }
+.credit b { color: var(--amber); }
+.credit a, .facts a { color: var(--amber); text-decoration: none; border-bottom: 1px dashed currentColor; }
+.about { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(10, 12, 8, .6); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); touch-action: pan-y; }
+.about.show { display: flex; }
+.about-card { width: min(520px, 100%); max-height: 92vh; overflow: auto; animation: pop .25s; }
+.dossier { display: flex; gap: 14px; align-items: center; margin-bottom: 10px; }
+.avatar-badge { width: 72px; height: 72px; flex: none; display: grid; place-items: center; font-family: var(--head); font-size: 40px; color: var(--ink);
+  background: linear-gradient(180deg, #f3bf47, var(--amber-2)); border-radius: 4px; box-shadow: inset 0 2px 0 rgba(255, 255, 255, .4), 0 4px 0 #7a5410;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+.dev-name { font-family: var(--head); font-size: 36px; line-height: 1; color: #f3ead2; letter-spacing: 2px; }
+.dev-role { color: var(--amber); letter-spacing: 3px; font-size: 14px; font-weight: 800; margin-top: 2px; }
+.bio { font-size: 17px; font-weight: 500; line-height: 1.4; color: var(--text); margin: 6px 0 12px; }
+.facts { margin: 0 0 12px; border-top: 1px dashed var(--line); }
+.facts div { display: flex; gap: 12px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+.facts dt { width: 96px; flex: none; color: var(--muted); font-size: 13px; letter-spacing: 2px; padding-top: 2px; }
+.facts dd { margin: 0; font-size: 16px; word-break: break-word; }
+a.btn { text-decoration: none; }
+@media (max-width: 760px) { #aboutBtn { order: 3; } }
+
 /* ---------- room ---------- */
 .room-card { width: min(680px, 100%); margin-top: 4vh; display: flex; flex-direction: column; gap: 12px; }
 .room-head { display: flex; justify-content: space-between; align-items: center; }

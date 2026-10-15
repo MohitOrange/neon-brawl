@@ -156,6 +156,12 @@
     else toast('Next match starts automatically ⏳');
   };
   $('rotateOk').onclick = () => { $('rotateHint').style.display = 'none'; };
+  const about = (on) => { $('about').classList.toggle('show', on); if (on) { SFX.init(); SFX.click(); } };
+  $('aboutBtn').onclick = () => about(true);
+  $('creditLink').onclick = (e) => { e.preventDefault(); about(true); };
+  $('aboutClose').onclick = () => about(false);
+  $('about').onclick = (e) => { if (e.target.id === 'about') about(false); };
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') about(false); });
 
   // room controls
   $('addBot').onclick = () => Net.emit('addBot');

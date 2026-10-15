@@ -34,6 +34,7 @@
       </div>
       <div class="topbar-right">
         <div id="onlinePill" class="pill"><span class="dot"></span><span id="onlineTxt">connecting…</span></div>
+        <button class="btn small steel" id="aboutBtn" title="About the developer">ℹ ABOUT</button>
         <button class="iconbtn" id="soundBtn" title="Sound">🔊</button>
         <button class="iconbtn" id="fsBtn" title="Fullscreen">⛶</button>
       </div>
@@ -98,6 +99,36 @@
       <span><kbd>F</kbd>/<kbd>RMB</kbd> jetpack</span><span><kbd>S</kbd> crouch</span><span><kbd>LMB</kbd> fire</span>
       <span><kbd>R</kbd> reload</span><span><kbd>Q</kbd> swap</span><span><kbd>Tab</kbd> scores</span><span><kbd>T</kbd> chat</span>
     </footer>
+    <div class="credit">Designed &amp; developed by <b>Mohit</b> · <a href="#" id="creditLink">about</a></div>
+
+    <!-- about the developer -->
+    <div class="about" id="about" role="dialog" aria-labelledby="aboutTitle">
+      <div class="card about-card">
+        <div class="card-head"><span class="num">ID</span><h2 id="aboutTitle">ABOUT THE DEVELOPER</h2></div>
+        <div class="dossier">
+          <div class="avatar-badge" aria-hidden="true">M</div>
+          <div>
+            <div class="muted">CALLSIGN</div>
+            <div class="dev-name">MOHIT</div>
+            <div class="dev-role">GAME DEVELOPER</div>
+          </div>
+        </div>
+        <p class="bio">Hi, I'm Mohit — a game developer who loves building fast, fun multiplayer games that run anywhere.
+          Neon Brawl is my 2D online combat shooter for the web: jump in from a phone, tablet or PC, put your own face on your soldier,
+          and battle friends or bots.</p>
+        <dl class="facts">
+          <div><dt>PROJECT</dt><dd>Neon Brawl — 2D online multiplayer shooter</dd></div>
+          <div><dt>BUILT WITH</dt><dd>HTML5 Canvas · JavaScript · Node.js · Socket.io</dd></div>
+          <div><dt>PLAYS ON</dt><dd>Desktop · Mobile · Tablet</dd></div>
+          <div><dt>GITHUB</dt><dd><a href="https://github.com/MohitOrange" target="_blank" rel="noopener">@MohitOrange</a></dd></div>
+          <div><dt>CONTACT</dt><dd><a href="mailto:mohitgamedeveloper@gmail.com">mohitgamedeveloper@gmail.com</a></dd></div>
+        </dl>
+        <div class="row2">
+          <a class="btn amber" href="https://github.com/MohitOrange/neon-brawl" target="_blank" rel="noopener">★ STAR ON GITHUB</a>
+          <button class="btn ghost" id="aboutClose">CLOSE</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ============ ROOM LOBBY ============ -->

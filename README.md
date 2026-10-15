@@ -83,5 +83,18 @@ public/
 ## 🔒 Privacy note
 Face photos are resized to a small 128×128 image in the browser, kept in your browser's local storage, and only sent to the players in your current room. Nothing is stored on the server.
 
+## 👤 About the developer
+
+**Mohit** — game developer.
+
+- GitHub: [@MohitOrange](https://github.com/MohitOrange)
+- Contact: [mohitgamedeveloper@gmail.com](mailto:mohitgamedeveloper@gmail.com)
+
+Neon Brawl is designed and developed by Mohit. If you enjoy it, give the repo a ⭐!
+
+## Credits
+- "You're out" sound effect: `public/sounds/out.mp3`, supplied by Mohit.
+- Fonts: [Black Ops One](https://fonts.google.com/specimen/Black+Ops+One) and [Barlow Condensed](https://fonts.google.com/specimen/Barlow+Condensed) (SIL Open Font License).
+
 ## License
 MIT
