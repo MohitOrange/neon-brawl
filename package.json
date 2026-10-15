@@ -1,0 +1,19 @@
+{
+  "name": "neon-brawl",
+  "version": "1.0.0",
+  "description": "Neon Brawl — a colourful 2D online multiplayer shooter for web, mobile and tablet. Put your own face on your fighter!",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["game", "multiplayer", "shooter", "2d", "html5", "canvas", "socket.io", "mobile"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#12002b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Neon Brawl — colourful 2D online multiplayer shooter. Put your face on your fighter and battle friends or bots!" />
+  <title>Neon Brawl</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💥</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- ============ MAIN MENU ============ -->
+  <section id="menu" class="screen active">
+    <div class="menu-bg"><div class="sun"></div><div class="grid"></div></div>
+    <header class="brand">
+      <h1 class="logo" data-text="NEON BRAWL">NEON BRAWL</h1>
+      <div class="tag">2D ONLINE ARENA SHOOTER</div>
+      <div id="onlinePill" class="pill"><span class="dot"></span><span id="onlineTxt">connecting…</span></div>
+    </header>
+
+    <div class="menu-grid">
+      <!-- character creator -->
+      <div class="card creator">
+        <h2>YOUR FIGHTER</h2>
+        <div class="preview-wrap">
+          <canvas id="preview" width="260" height="260"></canvas>
+          <div class="face-btns">
+            <label class="btn small glow-pink" for="faceInput">📸 ADD YOUR FACE</label>
+            <input type="file" id="faceInput" accept="image/*" hidden />
+            <button class="btn small ghost" id="faceRemove" hidden>✕ remove</button>
+          </div>
+        </div>
+        <label class="field">
+          <span>NAME</span>
+          <input id="nameInput" maxlength="16" placeholder="Enter your name" autocomplete="off" />
+        </label>
+        <div class="seg" id="genderSeg">
+          <button data-g="male" class="on">♂ MALE</button>
+          <button data-g="female">♀ FEMALE</button>
+        </div>
+        <div class="swatch-row"><span>SKIN</span><div class="swatches" id="skinSw"></div></div>
+        <div class="swatch-row"><span>HAIR</span><div class="swatches" id="hairSw"></div></div>
+        <div class="swatch-row"><span>OUTFIT</span><div class="swatches" id="shirtSw"></div></div>
+        <label class="toggle"><input type="checkbox" id="bigHead" checked /> <span>BIG-HEAD MODE 🤪 (for face photos)</span></label>
+      </div>
+
+      <!-- play options -->
+      <div class="card play">
+        <h2>PLAY</h2>
+        <button class="btn big glow-cyan" id="btnQuick">⚡ QUICK MATCH <small>online</small></button>
+        <div class="row2">
+          <button class="btn glow-purple" id="btnCreate">➕ CREATE ROOM</button>
+          <div class="join">
+            <input id="codeInput" maxlength="5" placeholder="CODE" autocomplete="off" />
+            <button class="btn glow-purple" id="btnJoin">JOIN</button>
+          </div>
+        </div>
+        <div class="divider"><span>OR PRACTICE OFFLINE</span></div>
+        <div class="bots-box">
+          <div class="row-lbl"><span>BOTS</span><b id="botCountTxt">5</b></div>
+          <input type="range" id="botCount" min="1" max="11" value="5" />
+          <div class="seg small" id="diffSeg">
+            <button data-d="easy">EASY</button><button data-d="normal" class="on">NORMAL</button><button data-d="hard">HARD</button>
+          </div>
+          <button class="btn big glow-pink" id="btnBots">🤖 PLAY VS BOTS</button>
+        </div>
+        <div class="controls-help">
+          <div><kbd>A</kbd><kbd>D</kbd> walk · <kbd>Shift</kbd> run · <kbd>W</kbd>/<kbd>Space</kbd> jump ×2</div>
+          <div><kbd>F</kbd>/<kbd>Right-click</kbd> jetpack · <kbd>S</kbd> crouch / drop · <kbd>Click</kbd> shoot</div>
+          <div><kbd>R</kbd> reload · <kbd>Q</kbd> swap gun · <kbd>Tab</kbd> scores · <kbd>T</kbd> chat · <kbd>1-4</kbd> emotes</div>
+        </div>
+      </div>
+    </div>
+    <footer class="foot"><button class="iconbtn" id="soundBtn">🔊</button><button class="iconbtn" id="fsBtn">⛶</button></footer>
+  </section>
+
+  <!-- ============ ROOM LOBBY ============ -->
+  <section id="room" class="screen">
+    <div class="menu-bg"><div class="sun"></div><div class="grid"></div></div>
+    <div class="card room-card">
+      <div class="room-head">
+        <div>
+          <div class="muted">ROOM CODE</div>
+          <div class="code" id="roomCode">-----</div>
+        </div>
+        <button class="btn small glow-cyan" id="copyLink">🔗 COPY INVITE</button>
+      </div>
+      <div class="players" id="roomPlayers"></div>
+      <div class="host-ctrl" id="hostCtrl">
+        <div class="row2">
+          <button class="btn small" id="addBot">+ BOT</button>
+          <button class="btn small" id="remBot">− BOT</button>
+          <select id="setTime"><option value="120">2 min</option><option value="180">3 min</option><option value="300" selected>5 min</option><option value="600">10 min</option></select>
+          <select id="setKills"><option value="10">10 kills</option><option value="20" selected>20 kills</option><option value="30">30 kills</option><option value="50">50 kills</option></select>
+          <select id="setDiff"><option value="easy">easy bots</option><option value="normal" selected>normal bots</option><option value="hard">hard bots</option></select>
+        </div>
+        <button class="btn big glow-pink" id="startBtn">▶ START MATCH</button>
+      </div>
+      <div class="muted center" id="waitHost">Waiting for host to start…</div>
+      <button class="btn ghost" id="leaveRoom">← LEAVE</button>
+    </div>
+  </section>
+
+  <!-- ============ IN-GAME HUD ============ -->
+  <section id="hud" class="screen">
+    <div class="hud-top">
+      <div class="hud-score" id="hudScore">0 <small>KILLS</small></div>
+      <div class="hud-timer" id="hudTimer">5:00</div>
+      <div class="hud-btns"><button class="iconbtn" id="hudBoard">🏆</button><button class="iconbtn" id="hudMenu">☰</button></div>
+    </div>
+    <div class="killfeed" id="killfeed"></div>
+    <div class="chatlog" id="chatlog"></div>
+    <canvas id="minimap" width="180" height="90"></canvas>
+    <div class="hud-bottom">
+      <div class="hp-box">
+        <div class="hp-face"><canvas id="hudFace" width="64" height="64"></canvas></div>
+        <div class="bars">
+          <div class="bar hp"><i id="hpFill"></i><span id="hpTxt">100</span></div>
+          <div class="bar jet"><i id="jetFill"></i><span>JET</span></div>
+        </div>
+      </div>
+      <div class="ammo-box">
+        <div class="wname" id="wName">PISTOL</div>
+        <div class="ammo" id="ammoTxt">12 <small>/ ∞</small></div>
+        <div class="reload" id="reloadTxt"></div>
+      </div>
+    </div>
+    <div class="center-msg" id="centerMsg"></div>
+    <div class="hitmarker" id="hitmarker">✕</div>
+    <div class="dmg-vignette" id="vignette"></div>
+    <input id="chatInput" maxlength="80" placeholder="Say something… (Enter)" autocomplete="off" />
+
+    <!-- touch controls -->
+    <div id="touch">
+      <div class="stick left" id="stickL"><div class="knob"></div></div>
+      <div class="stick right" id="stickR"><div class="knob"></div><span>AIM / FIRE</span></div>
+      <div class="tbtns">
+        <button data-b="jump" class="tb jump">⤒</button>
+        <button data-b="jet" class="tb jet">🚀</button>
+        <button data-b="reload" class="tb small">R</button>
+        <button data-b="swap" class="tb small">⇄</button>
+        <button data-b="emote" class="tb small">😂</button>
+      </div>
+    </div>
+
+    <div class="board" id="board">
+      <h2>SCOREBOARD</h2>
+      <table><thead><tr><th>#</th><th>PLAYER</th><th>K</th><th>D</th></tr></thead><tbody id="boardBody"></tbody></table>
+    </div>
+
+    <div class="pause" id="pause">
+      <div class="card">
+        <h2>PAUSED</h2>
+        <button class="btn big glow-cyan" id="resumeBtn">RESUME</button>
+        <button class="btn" id="pSound">🔊 SOUND</button>
+        <button class="btn ghost" id="quitBtn">QUIT TO MENU</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MATCH END ============ -->
+  <section id="end" class="screen">
+    <div class="card end-card">
+      <h1 class="logo small" data-text="MATCH OVER">MATCH OVER</h1>
+      <div class="podium" id="podium"></div>
+      <div class="standings" id="standings"></div>
+      <div class="row2">
+        <button class="btn big glow-pink" id="againBtn">↻ PLAY AGAIN</button>
+        <button class="btn ghost" id="endMenu">MENU</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="rotateHint">📱↻ Rotate your phone for the best experience <button id="rotateOk">OK</button></div>
+  <div id="toast"></div>
+
+  <script src="config.js"></script>
+  <script>
+    // same-origin client when the Node server hosts the page, CDN client when the page is on GitHub Pages
+    document.write('<script src="' + (window.NEON_SERVER ? 'https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js' : 'socket.io/socket.io.js') + '"><\/script>');
+  </script>
+  <script src="shared/room.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
