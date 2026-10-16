@@ -114,21 +114,21 @@
   $('btnBots').onclick = startSolo;
   $('btnQuick').onclick = () => {
     SFX.init();
-    if (!Net.online) return toast('Online server not reachable — try PLAY VS BOTS 🤖');
+    if (!Net.canPlayOnline) return toast('Online play is not available in this browser — try PLAY VS BOTS 🤖');
     SFX.music(true); goFull(); lastSolo = null;
     Net.online_('quick', null, clean()); toast('Finding a match…');
   };
   $('btnCreate').onclick = () => {
     SFX.init();
-    if (!Net.online) return toast('Online server not reachable');
-    lastSolo = null; Net.online_('create', null, clean());
+    if (!Net.canPlayOnline) return toast('Online play is not available in this browser');
+    lastSolo = null; Net.online_('create', null, clean()); toast('Creating room…');
   };
   $('btnJoin').onclick = () => {
     SFX.init();
     const code = $('codeInput').value.trim().toUpperCase();
     if (code.length < 4) return toast('Enter a room code');
-    if (!Net.online) return toast('Online server not reachable');
-    lastSolo = null; Net.online_('join', { code }, clean());
+    if (!Net.canPlayOnline) return toast('Online play is not available in this browser');
+    lastSolo = null; Net.online_('join', { code }, clean()); toast('Joining room ' + code + '…');
   };
   $('codeInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('btnJoin').click(); });
   const qs = new URLSearchParams(location.search).get('room');
@@ -221,11 +221,12 @@
   // --------------------------------------------------------- network --
   Net.on('online', (d) => {
     const pill = $('onlinePill');
-    if (d.n < 0) { pill.className = 'pill off'; $('onlineTxt').textContent = 'offline · bots only'; }
+    if (d.n < 0 && d.p2p) { pill.className = 'pill on'; $('onlineTxt').textContent = 'online · play with friends'; }
+    else if (d.n < 0) { pill.className = 'pill off'; $('onlineTxt').textContent = 'offline · bots only'; }
     else { pill.className = 'pill on'; $('onlineTxt').textContent = `${d.n} online · ${d.rooms} rooms`; }
   });
   Net.on('connected', () => { $('onlinePill').className = 'pill on'; $('onlineTxt').textContent = 'online'; });
-  Net.on('disconnected', () => { toast('Connection lost 😢'); toMenu(); });
+  Net.on('disconnected', (d) => { toast((d && d.m) || 'Connection lost 😢'); toMenu(); });
   Net.on('err', (d) => { toast(d.m); Net.leave(); });
   Net.on('joined', () => { /* roster follows */ });
   Net.on('roster', (s) => {

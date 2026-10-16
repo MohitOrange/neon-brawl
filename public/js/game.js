@@ -255,7 +255,7 @@ const Game = (() => {
     spawnShots(e.id, tip.x, tip.y, angs, w, true);
     const pkt = { x: Math.round(tip.x), y: Math.round(tip.y), a: angs, w };
     if (e.isBot) pkt.id = e.id;
-    if (Net.mode === 'online') Net.emit('shot', pkt);
+    if (Net.networked) Net.emit('shot', pkt);
     if (e.id === myId) {
       shake = Math.max(shake, W.shake);
       if (W.kick > 100 && !e.ground) { e.vx -= Math.cos(e.aim) * W.kick; e.vy -= Math.sin(e.aim) * W.kick * 0.9; }
@@ -825,7 +825,7 @@ const Game = (() => {
     const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
     last = now;
     t += dt;
-    if (!paused || Net.mode === 'online') step(dt);
+    if (!paused || Net.networked) step(dt);
     render();
   }
   function step(dt) {
@@ -851,7 +851,7 @@ const Game = (() => {
     deathMsgT = Math.max(0, deathMsgT - dt);
     bigT -= dt;
     sendT -= dt;
-    if (sendT <= 0 && Net.mode === 'online') {
+    if (sendT <= 0 && Net.networked) {
       sendT = 1 / 15;
       if (m && m.alive) Net.emit('st', pack(m));
       if (myId === hostId) {

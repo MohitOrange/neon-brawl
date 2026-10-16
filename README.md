@@ -7,7 +7,7 @@ Put **your own face** on your soldier, pick male or female, choose your uniform 
 
 ## ✨ Features
 
-- **Online multiplayer** — Quick Match (auto-fills with bots, new players replace bots), or private rooms with a 5-letter code / invite link. Up to 12 fighters per room.
+- **Online multiplayer** — Quick Match (auto-fills with bots, new players replace bots), or private rooms with a 5-letter code / invite link. Up to 12 fighters per room. Works straight from GitHub Pages (peer-to-peer), or through the optional Node server.
 - **Offline vs Bots** — 1–11 bots, Easy / Normal / Hard. Works with no server at all.
 - **📸 Your face in the game** — upload a photo; it's cropped and put on your fighter. Big-Head mode makes it extra funny, and your head pops off and bounces when you're eliminated.
 - **Male & female fighters** — skin, hair and outfit colours, custom name.
@@ -45,23 +45,25 @@ npm start
 
 Open the page in two browser tabs (or on your phone on the same Wi-Fi via `http://<your-pc-ip>:3000`) to play together.
 
-## 🌍 Deploy (free)
+## 🌍 Play online with friends — no server needed
 
-GitHub Pages only serves static files, so the **multiplayer server must run on a Node host**. Two options:
+The live GitHub Pages site supports online multiplayer out of the box:
 
-### Option A — everything on Render (easiest)
-1. Push this repo to GitHub.
-2. On [render.com](https://render.com) → **New → Blueprint** → pick the repo (it reads `render.yaml`). Or **New → Web Service** with build `npm install` and start `npm start`.
-3. Open the Render URL — online and offline modes both work.
+- **Create Room** → your browser becomes the host. Share the 5-letter code or the 🔗 invite link.
+- **Join** → your friend's browser connects **directly to the host** (peer-to-peer over WebRTC).
+- **Quick Match** → joins the public room if one is running, otherwise hosts it (bots fill empty slots).
 
-(Railway, Fly.io, Glitch or any VPS work the same way: `npm install && npm start`, `PORT` is read from the environment.)
+Matchmaking uses the free [PeerJS](https://peerjs.com) cloud only to introduce players; gameplay traffic goes player-to-player.
+Keep the host's tab open — if the host leaves, the room closes. A few strict networks (some offices, schools or mobile carriers)
+block direct connections; switching Wi-Fi ↔ mobile data usually fixes it.
 
-### Option B — game on GitHub Pages + server on Render
-1. Deploy the server as in Option A.
-2. Edit `public/config.js` and set `window.NEON_SERVER = 'https://your-app.onrender.com';`
-3. In GitHub: **Settings → Pages → Source: GitHub Actions**. The included workflow `.github/workflows/pages.yml` publishes the `public/` folder on every push to `main`.
+### Optional: run your own server
+For big public lobbies you can also deploy `server.js` (Render, Railway, Fly.io, any Node host — `npm install && npm start`, `render.yaml` included).
+When the page is served by that server, the game uses it automatically. To use it from GitHub Pages, set
+`window.NEON_SERVER = 'https://your-app.onrender.com'` in `public/config.js`.
 
-Without a server URL, the GitHub Pages version still runs **Play vs Bots** offline.
+### GitHub Pages
+**Settings → Pages → Source: GitHub Actions.** `.github/workflows/pages.yml` publishes the `public/` folder on every push to `main`.
 
 ## 🗂 Project structure
 
@@ -72,7 +74,7 @@ public/
   config.js             optional external server URL
   css/style.css         neon UI, responsive + touch layout
   shared/room.js        map data + room rules (used by server AND offline mode)
-  js/net.js             online/offline network layer
+  js/net.js             network layer: Socket.io server, peer-to-peer (PeerJS) or offline
   js/game.js            physics, guns, bots AI, effects, rendering, input, HUD
   js/character.js       weapons + procedural male/female fighters with face photos
   js/world.js           synthwave sky, parallax city, platforms and props
